@@ -42,12 +42,8 @@ function handleKeyPress () {
         startGame = true;
         console.log("KeyBoard detected at startup");
         $("#level-title").text("Level " + level);
-
-        //startOver();
         nextSequence();
-        
         $(".btn").on("click", handleButtonClick);
-        
     }
 }
 
@@ -57,10 +53,8 @@ function handleButtonClick() {
         var userChosenColor = $(this).attr("id");
         userClickedPattern.push(userChosenColor);
         console.log("User pattern: " + userChosenColor);
-
         playSound(userChosenColor);
         animatePress(userChosenColor);
-
         checkAnswer(userClickedPattern.length - 1);
     }
 }
@@ -78,19 +72,17 @@ function startOver() {
 };
 
 function gameOver() {
+
     $(".btn").off("click");
     playSound("wrong");
     // Adds game-over overlay to body element
     $("body").addClass('game-over');
-    $("#level-title").html("Game Over! <br> You reached level: " + level + " <br>Press space bar to play again.")
-
+    $("#level-title").html("Game Over! <br> You reached level: " + level + " <br>Press space bar to play again.");
     // Controls length of Game Over Color
     setTimeout(function(){
         $("body").removeClass("game-over");
     }, 1000);
 
-    
-    
     console.log("------WRONG-------");
     console.log("CPU: " + gamePattern);
     console.log("User: " + userClickedPattern);
@@ -108,7 +100,6 @@ function checkAnswer (currentLevel) {
                 nextSequence();
             }, 1000);
         }
-
     } else {
         gameOver();
     }    
