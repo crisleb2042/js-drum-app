@@ -4,12 +4,15 @@
 This project is an implementation of the classic Simon game using HTML, CSS, and JavaScript. Test your memory in this challenge to remember and repeat a growing sequence of colors and sounds.
 
 Game Start
+
 ![Game Start](/public/images/title.png)
 
 Level 1
+
 ![Level 1](public/images/level1.png)
 
 Game Over!
+
 ![Game Over!](public/images/gameover.png)
 
 ## How to Run This Project Locally
