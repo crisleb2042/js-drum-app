@@ -31,24 +31,27 @@ var startGame = false;
 
 // ----- CONTROLLERS -------- //
 
-$(document).on("keydown", function() {
-    
-    if (!startGame) {
-        console.log("KeyBoard detected at startup");
-        $("#level-title").text("Level " + level);
-        nextSequence();
-        startGame = true;
-        
-    } else {
-        console.log("------RESTART----------");
-        nextSequence();
-        console.log("KeyBoard detected to startover");
-    }
+$(document).ready(function(){
+    $(document).on("keydown", handleKeyPress);
 });
 
-$(".btn").click(function() {
+function handleKeyPress () {
 
-    console.log("Click detected");
+    if (!startGame) {
+        $(document).off("keydown");
+        startGame = true;
+        console.log("KeyBoard detected at startup");
+        $("#level-title").text("Level " + level);
+
+        //startOver();
+        nextSequence();
+        
+        $(".btn").on("click", handleButtonClick);
+        
+    }
+}
+
+function handleButtonClick() {
 
     if (startGame) {
         var userChosenColor = $(this).attr("id");
@@ -60,16 +63,39 @@ $(".btn").click(function() {
 
         checkAnswer(userClickedPattern.length - 1);
     }
-});
+}
 
 function startOver() {
 
     level = 0;
     gamePattern = [];
     userClickedPattern = [];
-    startGame = false;
     console.log("Arrays Reset");
+    startGame = false;
+    $(document).ready(function(){
+        $(document).on("keydown", handleKeyPress);
+    });
 };
+
+function gameOver() {
+    $(".btn").off("click");
+    playSound("wrong");
+    // Adds game-over overlay to body element
+    $("body").addClass('game-over');
+    $("#level-title").html("Game Over! <br> You reached level: " + level + " <br>Press space bar to play again.")
+
+    // Controls length of Game Over Color
+    setTimeout(function(){
+        $("body").removeClass("game-over");
+    }, 1000);
+
+    
+    
+    console.log("------WRONG-------");
+    console.log("CPU: " + gamePattern);
+    console.log("User: " + userClickedPattern);
+    startOver();
+}
 
 // ----- MODEL: GAME LOGIC -------- //
 
@@ -84,30 +110,12 @@ function checkAnswer (currentLevel) {
         }
 
     } else {
-        
-        playSound("wrong");
-        // Adds game-over overlay to body element
-        $("body").addClass('game-over');
-        $("#level-title").html("Game Over! <br> You reached level: " + level + " <br>Press space bar to play again.")
-
-        // Controls length of Game Over Color
-        setTimeout(function(){
-            $("body").removeClass("game-over");
-        }, 2000);
-
-        
-        console.log("------WRONG-------");
-        console.log("CPU: " + gamePattern);
-        console.log("User: " + userClickedPattern);
-        startOver();
-        }
-
-    return false;
-    
+        gameOver();
+    }    
 }
 
 function nextSequence () {
-
+    
     userClickedPattern = [];
     level++;
     $("#level-title").text("Level " + level);
@@ -150,9 +158,9 @@ function animateSoundSequence (colorsInArray, index) {
         return;
     }
 
+    playSound(colorsInArray[index]);
     $('#' + colorsInArray[index]).fadeIn(100).fadeOut(100).fadeIn(100)
     .promise().done(function() {
-        playSound(colorsInArray[index]);
         //Recursive Function to play all sounds and animate color in the GamePattern Array
         setTimeout(function (){
             animateSoundSequence(colorsInArray, index + 1);
