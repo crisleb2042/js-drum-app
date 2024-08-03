@@ -26,9 +26,6 @@ var userClickedPattern = [];
 var level = 0;
 var startGame = false;
 
-// TO-DO Bug fix: If user clicks more than gamePattern[] then game still registers .click()
-// Need to turn off $(".btn").click() if userClickedPattern[].length > gamePattern[].length
-
 // ----- CONTROLLERS -------- //
 
 $(document).ready(function(){
